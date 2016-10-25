@@ -27,21 +27,33 @@ CONTAINER := $(PREFIX)/$(NAME)-$(ARCH):$(TAG)
 
 SRCS := $(shell find . -name \*.go)
 
-all:
+all: images push
 
 images: $(DOCKER_BUILD_STAMPS)
 
 push: $(DOCKER_PUSH_STAMPS)
 
-%.build.stamp: Dockerfile.%
-	docker build -t $(PREFIX)/$*-$(ARCH) -f Dockerfile.$* .
-	touch $@
+bowei-tk.build.stamp: dnsperf resperf
 
-%.push.stamp: %.build.stamp
-	gcloud docker -- push $(PREFIX)/$*-$(ARCH)
-	touch $@
+dnsperf: build-dnsperf.sh
+	bash build-dnsperf.sh
+
+resperf: build-dnsperf.sh
+	bash build-dnsperf.sh
 
 clean:
 	rm -f *.stamp
+	rm -f dnsperf
+	rm -f resperf
+
+%.build.stamp: Dockerfile.%
+	docker build -t $(PREFIX)/$*-$(ARCH):$(TAG) -f Dockerfile.$* .
+	touch $@
+
+%.push.stamp: %.build.stamp
+	gcloud docker -- push $(PREFIX)/$*-$(ARCH):$(TAG)
+	touch $@
 
 .PHONY: all image push clean
+
+# XXX/bowei -- add gcloud publish public command 

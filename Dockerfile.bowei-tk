@@ -11,4 +11,7 @@ RUN apk add iperf
 RUN apk add python
 RUN apk add vim
 
+COPY dnsperf /dnsperf
+COPY resperf /resperf
+
 ENTRYPOINT ["/bin/sleep", "10000"]
