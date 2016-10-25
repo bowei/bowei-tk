@@ -15,19 +15,33 @@ ARCH ?= amd64
 TAG ?= 1.0
 # PREFIX ?= gcr.io/google_containers
 PREFIX ?= gcr.io/bowei-gke-dev
-NAME ?= bowei-tk
+
+IMAGES := \
+	bowei-tk \
+	bowei-tk-cpu-hog
+
+DOCKER_BUILD_STAMPS := $(IMAGES:=.build.stamp)
+DOCKER_PUSH_STAMPS := $(IMAGES:=.push.stamp)
+
 CONTAINER := $(PREFIX)/$(NAME)-$(ARCH):$(TAG)
 
 SRCS := $(shell find . -name \*.go)
 
 all:
 
-image:
-	docker build -t $(CONTAINER) .
+images: $(DOCKER_BUILD_STAMPS)
 
-push: image
-	gcloud docker -- push $(CONTAINER)
+push: $(DOCKER_PUSH_STAMPS)
+
+%.build.stamp: Dockerfile.%
+	docker build -t $(PREFIX)/$*-$(ARCH) -f Dockerfile.$* .
+	touch $@
+
+%.push.stamp: %.build.stamp
+	gcloud docker -- push $(PREFIX)/$*-$(ARCH)
+	touch $@
 
 clean:
+	rm -f *.stamp
 
 .PHONY: all image push clean

@@ -1,0 +1,19 @@
+FROM alpine
+MAINTAINER Bowei Du bowei@google.com
+
+RUN apk update
+
+RUN apk add bind-tools
+RUN apk add curl
+RUN apk add gcc
+RUN apk add git
+RUN apk add iperf
+RUN apk add python
+RUN apk add vim
+RUN apk add musl
+RUN apk add musl-dev
+
+COPY spinner.c /spinner.c
+RUN gcc -o /spinner -O0 -Wall /spinner.c
+
+ENTRYPOINT ["/spinner", "10000"]

@@ -1,0 +1,50 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  creationTimestamp: 2016-10-24T23:59:23Z
+  generation: 5
+  labels:
+    app: bowei-tk
+  name: bowei-tk
+  namespace: default
+  resourceVersion: "538414"
+  selfLink: /api/v1/namespaces/default/replicationcontrollers/bowei-tk
+  uid: e340eb27-9a45-11e6-ab47-42010af00002
+spec:
+  replicas: 15
+  selector:
+    app: bowei-tk
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bowei-tk
+      name: bowei-tk
+    spec:
+      containers:
+      - image: gcr.io/bowei-gke-dev/bowei-tk-amd64:1.0
+        imagePullPolicy: Always
+        name: bowei-tk
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          limits:
+            memory: 170Mi
+          requests:
+            cpu: 100m
+            memory: 10Mi
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  fullyLabeledReplicas: 15
+  observedGeneration: 5
+  readyReplicas: 15
+  replicas: 15
