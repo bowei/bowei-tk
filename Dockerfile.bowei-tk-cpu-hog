@@ -16,4 +16,4 @@ RUN apk add musl-dev
 COPY spinner.c /spinner.c
 RUN gcc -o /spinner -O0 -Wall /spinner.c
 
-ENTRYPOINT ["/spinner", "10000"]
+ENTRYPOINT ["/spinner"]
