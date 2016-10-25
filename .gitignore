@@ -1,2 +1,5 @@
 *.stamp
 /build
+/dnsperf
+/resperf
+*~

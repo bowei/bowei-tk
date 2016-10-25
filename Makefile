@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ARCH ?= amd64
-TAG ?= 1.0
+TAG ?= 1.1
 # PREFIX ?= gcr.io/google_containers
 PREFIX ?= gcr.io/bowei-gke-dev
 
@@ -48,11 +48,11 @@ clean:
 
 %.build.stamp: Dockerfile.%
 	docker build -t $(PREFIX)/$*-$(ARCH):$(TAG) -f Dockerfile.$* .
-	touch $@
+	date > $@
 
 %.push.stamp: %.build.stamp
 	gcloud docker -- push $(PREFIX)/$*-$(ARCH):$(TAG)
-	touch $@
+	date > $@
 
 .PHONY: all image push clean
 
